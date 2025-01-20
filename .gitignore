@@ -1,0 +1,21 @@
+node_modules
+dist
+dist-ssr
+*.local
+eslint.config.js
+tsconfig.node.json
+tsconfig.json
+tsconfig.app.json
+postcss.config.js
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.bolt
