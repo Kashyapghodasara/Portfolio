@@ -31,10 +31,10 @@ const Hero = () => {
             </div>
           </div>
           <div className="mt-10 md:mt-0 md:w-1/2 flex justify-center">
-            <div className="relative w-64 h-64 md:w-80 md:h-80">
+            <div className="relative w-64 h-64 md:w-[320px] md:h-[320px]">
               <div className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 animate-pulse"></div>
               <img
-                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=300"
+                src="../../Profile image.jpg"
                 alt="Profile"
                 className="absolute inset-2 rounded-full object-cover"
               />
