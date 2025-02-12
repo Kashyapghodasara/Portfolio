@@ -13,7 +13,7 @@ const Hero = () => {
               </span>
             </h1>
             <p className="text-xl text-gray-300">
-            "Passionate Full Stack Developer focusing on the MERN Stack and building scalable, user-friendly web applications. Eager to learn Cyber Security and Future Technologies"
+              "Passionate Full Stack Developer focusing on the MERN Stack and building scalable, user-friendly web applications. Eager to learn Cyber Security and Future Technologies"
             </p>
             <div className="flex space-x-4">
               <a
@@ -34,9 +34,9 @@ const Hero = () => {
             <div className="relative w-64 h-64 md:w-[320px] md:h-[320px]">
               <div className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 animate-pulse"></div>
               <img
-                src="../../Profile image.jpg"
+                src="/Portfolio/Profile-image.jpg"
                 alt="Profile"
-                className="absolute inset-2 rounded-full object-cover"
+                className="absolute inset-2 z-10 rounded-full object-cover"
               />
             </div>
           </div>
