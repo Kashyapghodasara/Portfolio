@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kashyap Ghodasara</title>
+    <!-- Google Fonts: Space Mono for that Retro Tech feel -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap"
+        rel="stylesheet">
+
+    <style>
+        /* --- CSS VARIABLES --- */
+        :root {
+            --bg-color: #050505;
+            --card-bg: #0a0a0a;
+            --text-main: #e0e0e0;
+            --text-dim: #888888;
+            --accent-green: #00ff41;
+            /* Retro Terminal Green */
+            --accent-purple: #bd00ff;
+            /* Cyberpunk Purple */
+            --accent-blue: #00f3ff;
+            /* Neon Blue */
+            --accent-glow: rgba(0, 255, 65, 0.15);
+            --border-color: #333;
+            --font-mono: 'Space Mono', monospace;
+        }
+
+        /* --- GLOBAL RESET --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: var(--font-mono);
+            line-height: 1.6;
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at 50% 50%, #111 0%, #050505 100%);
+        }
+
+        /* --- SCROLLBAR CUSTOMIZATION --- */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-color);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-green);
+        }
+
+        /* --- CRT SCANLINE EFFECT (Overlay) --- */
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(to bottom,
+                    rgba(255, 255, 255, 0),
+                    rgba(255, 255, 255, 0) 50%,
+                    rgba(0, 0, 0, 0.2) 50%,
+                    rgba(0, 0, 0, 0.2));
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 1000;
+            animation: flicker 0.15s infinite;
+        }
+
+        /* --- NAVIGATION --- */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(5, 5, 5, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 100;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo span {
+            color: var(--accent-green);
+        }
+
+        .clock {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 1px;
+            bottom: -2px;
+            left: 0;
+            background-color: var(--accent-green);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-green);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* --- LAYOUT UTILITIES --- */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+            padding-top: 6rem;
+        }
+
+        section {
+            padding: 4rem 0;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s cubic-bezier(0.645, 0.045, 0.355, 1), transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1);
+        }
+
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .section-header h2 {
+            font-size: 1.8rem;
+            color: var(--text-main);
+            margin-right: 1rem;
+        }
+
+        .section-header h2 span {
+            color: var(--accent-green);
+            font-size: 1.4rem;
+            margin-right: 0.5rem;
+        }
+
+        .line {
+            height: 1px;
+            background: var(--border-color);
+            flex-grow: 1;
+            max-width: 300px;
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            min-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .hero-intro {
+            color: var(--accent-green);
+            font-size: 1rem;
+            /* This is the small size */
+            margin-bottom: 1rem;
+            font-family: var(--font-mono);
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .hero h2 {
+            /* Was: clamp(1.5rem, 5vw, 3rem) */
+            /* Now: Max size reduced to 2.2rem */
+            font-size: clamp(1.2rem, 4vw, 2.2rem);
+            color: var(--text-dim);
+            margin-bottom: 1.5rem;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: var(--text-dim);
+            margin-bottom: 3rem;
+            max-width: 540px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 1rem 1.75rem;
+            background: transparent;
+            border: 1px solid var(--accent-green);
+            color: var(--accent-green);
+            text-decoration: none;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:hover {
+            background: rgba(0, 255, 65, 0.1);
+            box-shadow: 0 0 15px var(--accent-glow);
+            transform: translateY(-2px);
+        }
+
+        .social-icons {
+            margin-top: 2rem;
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .social-icons a {
+            color: var(--text-dim);
+            font-size: 1.5rem;
+            transition: 0.3s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .social-icons a:hover {
+            color: var(--accent-green);
+            transform: translateY(-3px);
+        }
+
+        /* --- EDUCATION --- */
+        .timeline {
+            border-left: 2px solid var(--border-color);
+            margin-left: 10px;
+            padding-left: 30px;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 3rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -37px;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            background: var(--bg-color);
+            border: 2px solid var(--accent-green);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--accent-green);
+        }
+
+        .timeline-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            margin-bottom: 0.5rem;
+        }
+
+        .role {
+            font-size: 1.3rem;
+            color: var(--text-main);
+            font-weight: bold;
+        }
+
+        .company {
+            color: var(--accent-blue);
+            font-size: 1rem;
+        }
+
+        .date {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            font-style: italic;
+        }
+
+        .timeline-desc ul {
+            list-style: none;
+            margin-top: 1rem;
+        }
+
+        .timeline-desc li {
+            position: relative;
+            padding-left: 20px;
+            margin-bottom: 0.5rem;
+            color: var(--text-dim);
+            font-size: 0.95rem;
+        }
+
+        .timeline-desc li::before {
+            content: '▹';
+            position: absolute;
+            left: 0;
+            color: var(--accent-green);
+        }
+
+        /* --- PROJECTS (Bento Grid) --- */
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .project-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 1.75rem;
+            transition: all 0.3s ease;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+        }
+
+        .project-card:hover {
+            border-color: var(--accent-green);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px -15px rgba(0, 0, 0, 0.7);
+        }
+
+        .folder-icon {
+            color: var(--accent-green);
+            margin-bottom: 1.5rem;
+            width: 40px;
+            height: 40px;
+        }
+
+        .project-links {
+            position: absolute;
+            top: 1.75rem;
+            right: 1.75rem;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .project-links a {
+            color: var(--text-dim);
+            transition: 0.3s;
+        }
+
+        .project-links a:hover {
+            color: var(--accent-green);
+        }
+
+        .project-title {
+            font-size: 1.4rem;
+            margin-bottom: 0.75rem;
+            color: var(--text-main);
+            font-weight: 700;
+        }
+
+        .project-desc {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            font-family: var(--font-mono);
+            margin-top: auto;
+        }
+
+        .tech-stack span {
+            color: var(--accent-blue);
+        }
+
+        /* --- SKILLS --- */
+        .skills-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .skill-pill {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-size: 1rem;
+            transition: 0.3s;
+            cursor: default;
+            /* Necessary for gradient text effects */
+            background-clip: padding-box;
+        }
+
+        /* 1. MongoDB - Dark Green */
+        .skill-pill.mongo:hover {
+            border-color: #47A248;
+            color: #47A248;
+            background: rgba(71, 162, 72, 0.1);
+            box-shadow: 0 0 10px rgba(71, 162, 72, 0.2);
+        }
+
+        /* 2. JavaScript - Yellow */
+        .skill-pill.js:hover {
+            border-color: #F7DF1E;
+            color: #F7DF1E;
+            background: rgba(247, 223, 30, 0.1);
+            box-shadow: 0 0 10px rgba(247, 223, 30, 0.2);
+        }
+
+        /* 3. Node JS - Moss Green */
+        .skill-pill.node:hover {
+            border-color: #8CC84B;
+            color: #8CC84B;
+            background: rgba(140, 200, 75, 0.1);
+            box-shadow: 0 0 10px rgba(140, 200, 75, 0.2);
+        }
+
+        /* 4. Tailwind - Light Blue */
+        .skill-pill.tailwind:hover {
+            border-color: #38B2AC;
+            color: #38B2AC;
+            background: rgba(56, 178, 172, 0.1);
+            box-shadow: 0 0 10px rgba(56, 178, 172, 0.2);
+        }
+
+        /* 5. Figma - Multicolor */
+        .skill-pill.figma:hover {
+            border-color: #A259FF;
+            /* Primary Figma Purple for border */
+            background: rgba(162, 89, 255, 0.05);
+            /* Gradient Text Effect */
+            background-image: linear-gradient(45deg, #F24E1E, #F24E1E, #A259FF, #1ABCFE, #0ACF83);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientMove 3s linear infinite;
+        }
+
+        /* 6. React JS - Blue */
+        .skill-pill.react:hover {
+            border-color: #61DAFB;
+            color: #61DAFB;
+            background: rgba(97, 218, 251, 0.1);
+            box-shadow: 0 0 10px rgba(97, 218, 251, 0.2);
+        }
+
+        /* 7. Postman - Orange */
+        .skill-pill.postman:hover {
+            border-color: #FF6C37;
+            color: #FF6C37;
+            background: rgba(255, 108, 55, 0.1);
+            box-shadow: 0 0 10px rgba(255, 108, 55, 0.2);
+        }
+
+        /* 8. Git & GitHub - Orange+Yellow Mixture */
+        .skill-pill.git:hover {
+            border-color: #F05032;
+            background: rgba(240, 80, 50, 0.05);
+            /* Gradient Text Effect */
+            background-image: linear-gradient(45deg, #F05032, #F0DB4F);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* 9. Express - Grey */
+        .skill-pill.express:hover {
+            border-color: #999999;
+            color: #e0e0e0;
+            /* Light grey/white for readability */
+            background: rgba(153, 153, 153, 0.15);
+            box-shadow: 0 0 10px rgba(153, 153, 153, 0.2);
+        }
+
+        /* Animation for Figma Gradient */
+        @keyframes gradientMove {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* --- CERTIFICATIONS --- */
+        .cert-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            /* Increased width slightly */
+            gap: 2rem;
+        }
+
+        .cert-item {
+            border: 1px solid var(--border-color);
+            background: var(--card-bg);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            /* Keeps image inside the border radius */
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* The sliding purple line effect */
+        .cert-item::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--accent-purple);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+            z-index: 10;
+        }
+
+        .cert-item:hover {
+            transform: translateY(-3px);
+            border-color: var(--accent-purple);
+            box-shadow: 0 10px 30px -15px rgba(189, 0, 255, 0.2);
+        }
+
+        .cert-item:hover::after {
+            transform: scaleX(1);
+        }
+
+        /* Image Container */
+        .cert-img-box {
+            width: 100%;
+            height: 300px;
+            /* Fixed height for uniformity */
+            overflow: hidden;
+            border-bottom: 1px solid var(--border-color);
+            background-color: #000;
+        }
+
+        .cert-img-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            /* Ensures image covers area without stretching */
+            object-position: center;
+            opacity: 1;
+            /* Dimmed slightly to fit dark theme */
+            transition: all 0.5s ease;
+            filter: grayscale(30%);
+            /* Retro tech feel */
+        }
+
+        /* Hover effects for image */
+        .cert-item:hover .cert-img-box img {
+            transform: scale(1.05);
+            /* Subtle zoom */
+            opacity: 1;
+            filter: grayscale(0%);
+        }
+
+        /* Text Content Wrapper */
+        .cert-content {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .cert-title {
+            color: var(--text-main);
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            line-height: 1.4;
+        }
+
+        .cert-issuer {
+            color: var(--accent-purple);
+            font-size: 0.9rem;
+            font-family: var(--font-mono);
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            text-align: center;
+            padding: 5rem 0 2rem;
+            margin-top: 5rem;
+        }
+
+        .footer-cta h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-cta p {
+            color: var(--text-dim);
+            max-width: 500px;
+            margin: 0 auto 3rem;
+        }
+
+        .credits {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            margin-top: 3rem;
+        }
+
+        /* --- ICONS SVG --- */
+        .icon {
+            width: 20px;
+            height: 20px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* --- MOBILE --- */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero h2 {
+                font-size: 1.5rem;
+            }
+
+            .container {
+                padding: 1.5rem;
+                padding-top: 5rem;
+            }
+
+            .section-header h2 {
+                font-size: 1.5rem;
+            }
+
+            nav {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Retro CRT Scanline Overlay -->
+    <div class="scanlines"></div>
+
+    <header>
+        <nav>
+            <div class="logo">
+                <span>&lt;K/G&gt;</span> Kashyap's Portfolio
+            </div>
+            <div class="clock" id="clock">00:00:00</div>
+            <ul class="nav-links">
+                <li><a href="#about">About</a></li>
+                <li><a href="#education">Journey</a></li>
+                <li><a href="#projects">Work</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container">
+
+        <section id="about" class="hero visible">
+            <div class="hero-intro">Hi, my name is</div>
+
+            <h1>Kashyap Ghodasara</h1>
+
+            <h2>Who loves to build Backend</h2>
+
+            <p>Self Learner Full Stack Developer. My expertise is in MERN Stack. I build real-world web applications
+                which actually solve problems.</p>
+
+            <div class="btn-group">
+                <a href="#projects" class="btn">Check out my work</a>
+                <a href="mailto:kashyappatel816@gmail.com" class="btn"
+                    style="border-color: var(--text-dim); color: var(--text-main);">Contact Me</a>
+            </div>
+
+            <div class="social-icons">
+                <a href="https://github.com/Kashyapghodasara" target="_blank" aria-label="GitHub">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path
+                            d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
+                        </path>
+                    </svg>
+                </a>
+                <a href="https://www.linkedin.com/in/kashyap-ghodasara-323b11314/" target="_blank"
+                    aria-label="LinkedIn">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                        <rect x="2" y="9" width="4" height="12"></rect>
+                        <circle cx="4" cy="4" r="2"></circle>
+                    </svg>
+                </a>
+            </div>
+        </section>
+
+        <!-- PROJECTS SECTION -->
+        <section id="projects">
+            <div class="section-header">
+                <h2><span>01.</span> Featured Projects</h2>
+                <div class="line"></div>
+            </div>
+
+            <div class="project-grid">
+                <!-- Project 1 -->
+                <div class="project-card">
+                    <div>
+                        <div class="flex justify-between items-start">
+                            <svg class="icon folder-icon" viewBox="0 0 24 24">
+                                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z">
+                                </path>
+                            </svg>
+                            <div class="project-links">
+                                <a href="https://github.com/Kashyapghodasara/Box-Cricket-App" target="_blank"><svg class="icon"
+                                        viewBox="0 0 24 24">
+                                        <path
+                                            d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
+                                        </path>
+                                    </svg></a>
+                                <a href="https://box-cricket-app.vercel.app/" target="_blank"><svg class="icon"
+                                        viewBox="0 0 24 24">
+                                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                                        <polyline points="15 3 21 3 21 9"></polyline>
+                                        <line x1="10" y1="14" x2="21" y2="3"></line>
+                                    </svg></a>
+                            </div>
+                        </div>
+                        <h3 class="project-title">Box Cricket Booking Website</h3>
+                        <p class="project-desc">Simplify the process of booking box cricket grounds. 
+                            The platform includes features for both Users and Admins, 
+                            ensuring smooth management of time slots, bookings, and payments.</p>
+                    </div>
+                    <div class="tech-stack">
+                        <span>MongoDB</span>
+                        <span>Express</span>
+                        <span>React</span>
+                        <span>Tailwind</span>
+                        <span>Zustand</span>
+                        <span>Jest</span>
+                        <span>Postman</span>
+                        <span>Vercel</span>
+                    </div>
+                </div>
+
+                <!-- Project 2 -->
+                <div class="project-card">
+                    <div>
+                        <div class="flex justify-between items-start">
+                            <svg class="icon folder-icon" viewBox="0 0 24 24">
+                                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z">
+                                </path>
+                            </svg>
+                            <div class="project-links">
+                                <a href="https://github.com/Kashyapghodasara/X-Clone" target="_blank"><svg
+                                        class="icon" viewBox="0 0 24 24">
+                                        <path
+                                            d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
+                                        </path>
+                                    </svg></a>
+                                <!-- <a href="" target="_blank"><svg class="icon"
+                                        viewBox="0 0 24 24">
+                                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                                        <polyline points="15 3 21 3 21 9"></polyline>
+                                        <line x1="10" y1="14" x2="21" y2="3"></line>
+                                    </svg></a> -->
+                            </div>
+                        </div>
+                        <h3 class="project-title">Twitter Clone</h3>
+                        <p class="project-desc">Designed to replicate and 
+                            enhance the core features of modern social networking platforms.</p>
+                    </div>
+                    <div class="tech-stack">
+                        <span>MongoDB</span>
+                        <span>Express</span>
+                        <span>React</span>
+                        <span>Tailwind</span>
+                        <span>Redux</span>
+                        <span>Multer</span>
+                    </div>
+                </div>
+
+                <!-- Project 3 -->
+                <div class="project-card">
+                    <div>
+                        <div class="flex justify-between items-start">
+                            <svg class="icon folder-icon" viewBox="0 0 24 24">
+                                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z">
+                                </path>
+                            </svg>
+                            <div class="project-links">
+                                <a href="https://github.com/Kashyapghodasara/Registration-Nodemailer" target="_blank"><svg
+                                        class="icon" viewBox="0 0 24 24">
+                                        <path
+                                            d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
+                                        </path>
+                                    </svg></a>
+                                <!-- <a href="/" target="_blank"><svg class="icon"
+                                        viewBox="0 0 24 24">
+                                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                                        <polyline points="15 3 21 3 21 9"></polyline>
+                                        <line x1="10" y1="14" x2="21" y2="3"></line>
+                                    </svg></a> -->
+                            </div>
+                        </div>
+                        <h3 class="project-title">Email Registration - Nodemailer</h3>
+                        <p class="project-desc">The Node.js application using Nodemailer to send automated emails. 
+                            Features include user registration email confirmations. 
+                            Customizable templates for a personalized user experience.</p>
+                    </div>
+                    <div class="tech-stack">
+                        <span>MongoDB</span>
+                        <span>Express</span>
+                        <span>React</span>
+                        <span>Tailwind</span>
+                        <span>Nodemailer</span>
+                    </div>
+                </div>
+
+                <!-- Project 4 -->
+                <div class="project-card">
+                    <div>
+                        <div class="flex justify-between items-start">
+                            <svg class="icon folder-icon" viewBox="0 0 24 24">
+                                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z">
+                                </path>
+                            </svg>
+                            <div class="project-links">
+                                <a href="https://github.com/Kashyapghodasara/Lost-Found-Hub" target="_blank"><svg class="icon"
+                                        viewBox="0 0 24 24">
+                                        <path
+                                            d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
+                                        </path>
+                                    </svg></a>
+                                <!-- <a href="" target="_blank"><svg class="icon"
+                                        viewBox="0 0 24 24">
+                                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                                        <polyline points="15 3 21 3 21 9"></polyline>
+                                        <line x1="10" y1="14" x2="21" y2="3"></line>
+                                    </svg></a> -->
+                            </div>
+                        </div>
+                        <h3 class="project-title">Lost and Found Hub</h3>
+                        <p class="project-desc">Lost and Found Hub for campus. 
+                            It is an centralized system for lost and found items. 
+                            We also provide email service and inform user when his/her product is found. 
+                            We also add the verification layer when user comes and collect their product</p>
+                    </div>
+                    <div class="tech-stack">
+                        <span>MongoDB</span>
+                        <span>Express</span>
+                        <span>React</span>
+                        <span>Tailwind</span>
+                        <span>Nodemailer</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SKILLS SECTION -->
+        <section id="skills">
+            <div class="section-header">
+                <h2><span>02.</span> Tech Arsenal</h2>
+                <div class="line"></div>
+            </div>
+
+            <div class="skills-wrapper">
+                <div class="skill-pill js">JavaScript (ES6+)</div>
+                <div class="skill-pill react">React.js</div>
+                <div class="skill-pill node">Node.js</div>
+                <div class="skill-pill express">Express</div>
+                <div class="skill-pill mongo">MongoDB</div>
+                <div class="skill-pill tailwind">Tailwind CSS</div>
+                <div class="skill-pill postman">Postman</div>
+                <div class="skill-pill figma">Figma</div>
+                <div class="skill-pill git">Git & GitHub</div>
+            </div>
+        </section>
+
+        <!-- JOURNEY/EDUCATION SECTION -->
+        <section id="education">
+            <div class="section-header">
+                <h2><span>03.</span> Education </h2>
+                <div class="line"></div>
+            </div>
+
+            <div class="timeline">
+                <!-- Role 1 -->
+                <div class="timeline-item">
+                    <div class="timeline-header">
+                        <div>
+                            <div class="role">Diploma in Computer Engineering</div>
+                            <div class="company">Atmiya University</div>
+                        </div>
+                        <div class="date">2023 - Present</div>
+                    </div>
+                    <div class="timeline-desc">
+                        <ul>
+                            <li>Understand Core Engineering Subject and Focusing on 
+                                MERN Stack Development as extra study </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Role 3 (Education) -->
+                <div class="timeline-item">
+                    <div class="timeline-header">
+                        <div>
+                            <div class="role">SSC</div>
+                            <div class="company">Sister Nivedita School - Rajkot</div>
+                        </div>
+                        <div class="date">2022 - 2023</div>
+                    </div>
+                    <div class="timeline-desc">
+                        <ul>
+                            <li>Percentage : 88.5%</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <section id="certifications">
+            <div class="section-header">
+                <h2><span>04.</span> Certifications</h2>
+                <div class="line"></div>
+            </div>
+
+            <div class="cert-container">
+
+                <div class="cert-item">
+                    <div class="cert-img-box">
+                        <img src="/Images/Forage TATA.PNG" alt="Cybersecurity Certificate" loading="lazy">
+                    </div>
+                    <div class="cert-content">
+                        <div class="cert-title">Cybersecurity Analyst Job Simulation (IAM)</div>
+                        <div class="cert-issuer">TATA Forage</div>
+                    </div>
+                </div>
+
+                <div class="cert-item">
+                    <div class="cert-img-box">
+                        <img src="./Images/AICTE.PNG" loading="lazy" alt="AICTE Certificate">
+                    </div>
+                    <div class="cert-content">
+                        <div class="cert-title">Fundamentals of Cyber Security</div>
+                        <div class="cert-issuer">AICTE</div>
+                    </div>
+                </div>
+
+                <div class="cert-item">
+                    <div class="cert-img-box">
+                        <img src="Images/Code Carnival.png" loading="lazy" alt="Code Carnival Certificate">
+                    </div>
+                    <div class="cert-content">
+                        <div class="cert-title">Code Carnival - 2025</div>
+                        <div class="cert-issuer">Atmiya University</div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- CONTACT FOOTER -->
+        <footer id="contact">
+            <div class="footer-cta">
+                <div class="section-header" style="justify-content: center; margin-bottom: 1rem;">
+                    <h2><span>05.</span> What's Next?</h2>
+                </div>
+                <p>
+                    I'm always excited to collaborate on innovative projects and always ready to grab an Opportunity !
+                    For More Say Hi
+                </p>
+                <a href="mailto:kashyappatel816@gmail.com" class="btn">Get In Touch</a>
+                <br><br>
+            </div>
+
+            <div class="credits">
+                By Kashyap Ghodasara
+            </div>
+        </footer>
+
+    </main>
+
+    <script>
+        // --- 1. SMOOTH SCROLL REVEAL ANIMATION ---
+        const observerOptions = {
+            threshold: 0.15
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target); // Only animate once
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // --- 2. LIVE CLOCK (Retro Touch) ---
+        function updateClock() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('en-US', { hour12: false });
+            document.getElementById('clock').textContent = timeString;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // --- 3. KEYBOARD NAV (For Accessibility/Hacker Feel) ---
+        document.addEventListener('keydown', (e) => {
+            if (e.key === '/') {
+                // Future implementation: Open command palette
+                // console.log("Cmd palette trigger");
+            }
+        });
+    </script>
+</body>
+
+</html>
