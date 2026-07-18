@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kashyap Ghodasara</title>
+    <title>Kashyap Ghodasara - Terminal</title>
     <!-- Google Fonts: Space Mono for that Retro Tech feel -->
     <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap"
         rel="stylesheet">
@@ -12,18 +12,16 @@
     <style>
         /* --- CSS VARIABLES --- */
         :root {
-            --bg-color: #050505;
-            --card-bg: #0a0a0a;
+            --bg-color: #030303;
+            --card-bg: rgba(10, 10, 10, 0.7);
             --text-main: #e0e0e0;
             --text-dim: #888888;
-            --accent-green: #00ff41;
-            /* Retro Terminal Green */
-            --accent-purple: #bd00ff;
-            /* Cyberpunk Purple */
-            --accent-blue: #00f3ff;
-            /* Neon Blue */
-            --accent-glow: rgba(0, 255, 65, 0.15);
-            --border-color: #333;
+            --accent-green: #00ff41; /* Retro Terminal Green */
+            --accent-purple: #bd00ff; /* Cyberpunk Purple */
+            --accent-blue: #00f3ff; /* Neon Blue */
+            --accent-red: #ff003c; /* Breach Red */
+            --accent-glow: 0 0 10px rgba(0, 255, 65, 0.4), 0 0 20px rgba(0, 255, 65, 0.2);
+            --border-color: #222;
             --font-mono: 'Space Mono', monospace;
         }
 
@@ -44,25 +42,28 @@
             font-family: var(--font-mono);
             line-height: 1.6;
             overflow-x: hidden;
-            background-image: radial-gradient(circle at 50% 50%, #111 0%, #050505 100%);
+            /* Cyber Grid Background */
+            background-image: 
+                linear-gradient(rgba(0, 255, 65, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 65, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            background-position: center center;
         }
 
         /* --- SCROLLBAR CUSTOMIZATION --- */
         ::-webkit-scrollbar {
             width: 8px;
         }
-
         ::-webkit-scrollbar-track {
             background: var(--bg-color);
+            border-left: 1px solid var(--border-color);
         }
-
         ::-webkit-scrollbar-thumb {
-            background: #333;
-            border-radius: 4px;
+            background: #222;
         }
-
         ::-webkit-scrollbar-thumb:hover {
             background: var(--accent-green);
+            box-shadow: var(--accent-glow);
         }
 
         /* --- CRT SCANLINE EFFECT (Overlay) --- */
@@ -75,12 +76,17 @@
             background: linear-gradient(to bottom,
                     rgba(255, 255, 255, 0),
                     rgba(255, 255, 255, 0) 50%,
-                    rgba(0, 0, 0, 0.2) 50%,
-                    rgba(0, 0, 0, 0.2));
+                    rgba(0, 0, 0, 0.25) 50%,
+                    rgba(0, 0, 0, 0.25));
             background-size: 100% 4px;
             pointer-events: none;
             z-index: 1000;
             animation: flicker 0.15s infinite;
+        }
+
+        @keyframes flicker {
+            0% { opacity: 0.95; }
+            100% { opacity: 1; }
         }
 
         /* --- NAVIGATION --- */
@@ -88,9 +94,10 @@
             position: fixed;
             top: 0;
             width: 100%;
-            background: rgba(5, 5, 5, 0.85);
+            background: rgba(3, 3, 3, 0.85);
             backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--accent-green);
+            box-shadow: 0 0 10px rgba(0, 255, 65, 0.1);
             z-index: 100;
             padding: 1rem 2rem;
             display: flex;
@@ -105,6 +112,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            text-shadow: var(--accent-glow);
         }
 
         .logo span {
@@ -113,7 +121,11 @@
 
         .clock {
             font-size: 0.8rem;
-            color: var(--text-dim);
+            color: var(--accent-green);
+            background: rgba(0, 255, 65, 0.1);
+            padding: 2px 8px;
+            border: 1px solid var(--accent-green);
+            border-radius: 3px;
         }
 
         .nav-links {
@@ -130,23 +142,23 @@
             position: relative;
         }
 
-        .nav-links a::after {
-            content: '';
+        .nav-links a::before {
+            content: '>';
             position: absolute;
-            width: 0;
-            height: 1px;
-            bottom: -2px;
-            left: 0;
-            background-color: var(--accent-green);
-            transition: width 0.3s;
+            left: -15px;
+            opacity: 0;
+            color: var(--accent-green);
+            transition: 0.3s;
         }
 
         .nav-links a:hover {
             color: var(--accent-green);
+            text-shadow: var(--accent-glow);
         }
 
-        .nav-links a:hover::after {
-            width: 100%;
+        .nav-links a:hover::before {
+            opacity: 1;
+            left: -12px;
         }
 
         /* --- LAYOUT UTILITIES --- */
@@ -179,6 +191,7 @@
             font-size: 1.8rem;
             color: var(--text-main);
             margin-right: 1rem;
+            text-shadow: 0 0 5px rgba(255,255,255,0.2);
         }
 
         .section-header h2 span {
@@ -189,9 +202,10 @@
 
         .line {
             height: 1px;
-            background: var(--border-color);
+            background: linear-gradient(90deg, var(--accent-green), transparent);
             flex-grow: 1;
             max-width: 300px;
+            opacity: 0.5;
         }
 
         /* --- HERO SECTION --- */
@@ -204,33 +218,81 @@
         }
 
         .hero-intro {
-            color: var(--accent-green);
+            color: var(--text-dim);
             font-size: 1rem;
-            /* This is the small size */
             margin-bottom: 1rem;
             font-family: var(--font-mono);
         }
+        
+        .hero-intro span.user { color: var(--accent-green); }
+        .hero-intro span.machine { color: var(--accent-blue); }
 
-        .hero h1 {
+        /* Glitch Effect on Name */
+        .glitch {
             font-size: clamp(2.5rem, 8vw, 4.5rem);
             line-height: 1.1;
             margin-bottom: 1rem;
             font-weight: 700;
+            position: relative;
+            color: white;
+            text-shadow: 0 0 10px rgba(255,255,255,0.3);
+        }
+
+        .glitch::before, .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-color);
+        }
+
+        .glitch::before {
+            left: 2px;
+            text-shadow: -2px 0 var(--accent-red);
+            clip: rect(24px, 550px, 90px, 0);
+            animation: glitch-anim 3s infinite linear alternate-reverse;
+        }
+
+        .glitch::after {
+            left: -2px;
+            text-shadow: -2px 0 var(--accent-blue);
+            clip: rect(85px, 550px, 140px, 0);
+            animation: glitch-anim 2.5s infinite linear alternate-reverse;
+        }
+
+        @keyframes glitch-anim {
+            0% { clip: rect(10px, 9999px, 31px, 0); }
+            5% { clip: rect(70px, 9999px, 73px, 0); }
+            10% { clip: rect(35px, 9999px, 86px, 0); }
+            15% { clip: rect(98px, 9999px, 2px, 0); }
+            20% { clip: rect(11px, 9999px, 94px, 0); }
+            25% { clip: rect(44px, 9999px, 17px, 0); }
+            30% { clip: rect(88px, 9999px, 62px, 0); }
+            100% { clip: rect(10px, 9999px, 31px, 0); }
         }
 
         .hero h2 {
-            /* Was: clamp(1.5rem, 5vw, 3rem) */
-            /* Now: Max size reduced to 2.2rem */
             font-size: clamp(1.2rem, 4vw, 2.2rem);
-            color: var(--text-dim);
+            color: var(--accent-green);
             margin-bottom: 1.5rem;
+            text-shadow: var(--accent-glow);
         }
+
+        .blink {
+            animation: blinker 1s linear infinite;
+        }
+        @keyframes blinker { 50% { opacity: 0; } }
 
         .hero p {
             font-size: 1.1rem;
             color: var(--text-dim);
             margin-bottom: 3rem;
             max-width: 540px;
+            border-left: 2px solid var(--accent-green);
+            padding-left: 15px;
+            background: rgba(0, 255, 65, 0.03);
         }
 
         .btn-group {
@@ -241,7 +303,7 @@
         .btn {
             display: inline-block;
             padding: 1rem 1.75rem;
-            background: transparent;
+            background: rgba(0, 0, 0, 0.5);
             border: 1px solid var(--accent-green);
             color: var(--accent-green);
             text-decoration: none;
@@ -249,17 +311,42 @@
             cursor: pointer;
             transition: 0.3s;
             position: relative;
-            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--accent-green);
+            z-index: -1;
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.3s ease;
         }
 
         .btn:hover {
-            background: rgba(0, 255, 65, 0.1);
-            box-shadow: 0 0 15px var(--accent-glow);
-            transform: translateY(-2px);
+            color: #000;
+            font-weight: bold;
+            box-shadow: var(--accent-glow);
+        }
+
+        .btn:hover::before {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        .btn-secondary {
+            border-color: var(--text-dim);
+            color: var(--text-main);
+        }
+        .btn-secondary::before {
+            background: var(--text-main);
         }
 
         .social-icons {
-            margin-top: 2rem;
+            margin-top: 3rem;
             display: flex;
             gap: 1.5rem;
         }
@@ -272,14 +359,20 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            border-radius: 4px;
+            background: var(--card-bg);
         }
 
         .social-icons a:hover {
             color: var(--accent-green);
+            border-color: var(--accent-green);
+            box-shadow: inset 0 0 10px rgba(0,255,65,0.2);
             transform: translateY(-3px);
         }
 
-        /* --- EDUCATION --- */
+        /* --- EDUCATION TIMELINE --- */
         .timeline {
             border-left: 2px solid var(--border-color);
             margin-left: 10px;
@@ -289,13 +382,22 @@
         .timeline-item {
             position: relative;
             margin-bottom: 3rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+            transition: 0.3s;
+        }
+
+        .timeline-item:hover {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.1);
         }
 
         .timeline-item::before {
             content: '';
             position: absolute;
-            left: -37px;
-            top: 5px;
+            left: -39px; /* Adjust based on padding */
+            top: 20px;
             width: 12px;
             height: 12px;
             background: var(--bg-color);
@@ -324,9 +426,12 @@
         }
 
         .date {
-            color: var(--text-dim);
+            color: var(--accent-green);
             font-size: 0.9rem;
             font-style: italic;
+            background: rgba(0,255,65,0.1);
+            padding: 2px 8px;
+            border-radius: 2px;
         }
 
         .timeline-desc ul {
@@ -343,13 +448,13 @@
         }
 
         .timeline-desc li::before {
-            content: '▹';
+            content: '>';
             position: absolute;
             left: 0;
             color: var(--accent-green);
         }
 
-        /* --- PROJECTS (Bento Grid) --- */
+        /* --- PROJECTS (Bento Grid with Cyber Accents) --- */
         .project-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -368,10 +473,39 @@
             height: 100%;
         }
 
+        /* High-Tech Corner Accents */
+        .project-card::before, .project-card::after {
+            content: '';
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            border: 2px solid transparent;
+            transition: 0.3s;
+        }
+        
+        .project-card::before {
+            top: -1px; left: -1px;
+        }
+        
+        .project-card::after {
+            bottom: -1px; right: -1px;
+        }
+
         .project-card:hover {
-            border-color: var(--accent-green);
+            border-color: #333;
+            background: #080808;
             transform: translateY(-5px);
-            box-shadow: 0 10px 30px -15px rgba(0, 0, 0, 0.7);
+            box-shadow: 0 10px 30px -15px rgba(0, 255, 65, 0.2);
+        }
+
+        .project-card:hover::before {
+            border-top-color: var(--accent-green);
+            border-left-color: var(--accent-green);
+        }
+
+        .project-card:hover::after {
+            border-bottom-color: var(--accent-green);
+            border-right-color: var(--accent-green);
         }
 
         .folder-icon {
@@ -379,6 +513,7 @@
             margin-bottom: 1.5rem;
             width: 40px;
             height: 40px;
+            filter: drop-shadow(0 0 5px rgba(0, 255, 65, 0.4));
         }
 
         .project-links {
@@ -396,6 +531,7 @@
 
         .project-links a:hover {
             color: var(--accent-green);
+            transform: scale(1.1);
         }
 
         .project-title {
@@ -423,6 +559,10 @@
 
         .tech-stack span {
             color: var(--accent-blue);
+            background: rgba(0, 243, 255, 0.05);
+            padding: 2px 6px;
+            border-radius: 2px;
+            border: 1px solid rgba(0, 243, 255, 0.2);
         }
 
         /* --- SKILLS --- */
@@ -433,117 +573,72 @@
         }
 
         .skill-pill {
-            background: rgba(255, 255, 255, 0.03);
+            background: var(--card-bg);
             border: 1px solid var(--border-color);
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
+            padding: 0.6rem 1.2rem;
+            border-radius: 2px;
             font-size: 1rem;
             transition: 0.3s;
             cursor: default;
-            /* Necessary for gradient text effects */
-            background-clip: padding-box;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .skill-pill::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 2px;
+            height: 100%;
+            background: transparent;
+            transition: 0.3s;
         }
 
-        /* 1. MongoDB - Dark Green */
-        .skill-pill.mongo:hover {
-            border-color: #47A248;
-            color: #47A248;
-            background: rgba(71, 162, 72, 0.1);
-            box-shadow: 0 0 10px rgba(71, 162, 72, 0.2);
-        }
+        /* Hover effects */
+        .skill-pill.mongo:hover { border-color: #47A248; color: #47A248; background: rgba(71, 162, 72, 0.1); box-shadow: 0 0 10px rgba(71, 162, 72, 0.2); }
+        .skill-pill.mongo:hover::before { background: #47A248; }
 
-        /* 2. JavaScript - Yellow */
-        .skill-pill.js:hover {
-            border-color: #F7DF1E;
-            color: #F7DF1E;
-            background: rgba(247, 223, 30, 0.1);
-            box-shadow: 0 0 10px rgba(247, 223, 30, 0.2);
-        }
+        .skill-pill.js:hover { border-color: #F7DF1E; color: #F7DF1E; background: rgba(247, 223, 30, 0.1); box-shadow: 0 0 10px rgba(247, 223, 30, 0.2); }
+        .skill-pill.js:hover::before { background: #F7DF1E; }
 
-        /* 3. Node JS - Moss Green */
-        .skill-pill.node:hover {
-            border-color: #8CC84B;
-            color: #8CC84B;
-            background: rgba(140, 200, 75, 0.1);
-            box-shadow: 0 0 10px rgba(140, 200, 75, 0.2);
-        }
+        .skill-pill.node:hover { border-color: #8CC84B; color: #8CC84B; background: rgba(140, 200, 75, 0.1); box-shadow: 0 0 10px rgba(140, 200, 75, 0.2); }
+        .skill-pill.node:hover::before { background: #8CC84B; }
 
-        /* 4. Tailwind - Light Blue */
-        .skill-pill.tailwind:hover {
-            border-color: #38B2AC;
-            color: #38B2AC;
-            background: rgba(56, 178, 172, 0.1);
-            box-shadow: 0 0 10px rgba(56, 178, 172, 0.2);
-        }
+        .skill-pill.tailwind:hover { border-color: #38B2AC; color: #38B2AC; background: rgba(56, 178, 172, 0.1); box-shadow: 0 0 10px rgba(56, 178, 172, 0.2); }
+        .skill-pill.tailwind:hover::before { background: #38B2AC; }
 
-        /* 5. Figma - Multicolor */
         .skill-pill.figma:hover {
-            border-color: #A259FF;
-            /* Primary Figma Purple for border */
-            background: rgba(162, 89, 255, 0.05);
-            /* Gradient Text Effect */
-            background-image: linear-gradient(45deg, #F24E1E, #F24E1E, #A259FF, #1ABCFE, #0ACF83);
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            border-color: #A259FF; background: rgba(162, 89, 255, 0.05);
+            background-image: linear-gradient(45deg, #F24E1E, #A259FF, #1ABCFE, #0ACF83);
+            background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             animation: gradientMove 3s linear infinite;
         }
 
-        /* 6. React JS - Blue */
-        .skill-pill.react:hover {
-            border-color: #61DAFB;
-            color: #61DAFB;
-            background: rgba(97, 218, 251, 0.1);
-            box-shadow: 0 0 10px rgba(97, 218, 251, 0.2);
-        }
+        .skill-pill.react:hover { border-color: #61DAFB; color: #61DAFB; background: rgba(97, 218, 251, 0.1); box-shadow: 0 0 10px rgba(97, 218, 251, 0.2); }
+        .skill-pill.react:hover::before { background: #61DAFB; }
 
-        /* 7. Postman - Orange */
-        .skill-pill.postman:hover {
-            border-color: #FF6C37;
-            color: #FF6C37;
-            background: rgba(255, 108, 55, 0.1);
-            box-shadow: 0 0 10px rgba(255, 108, 55, 0.2);
-        }
+        .skill-pill.postman:hover { border-color: #FF6C37; color: #FF6C37; background: rgba(255, 108, 55, 0.1); box-shadow: 0 0 10px rgba(255, 108, 55, 0.2); }
+        .skill-pill.postman:hover::before { background: #FF6C37; }
 
-        /* 8. Git & GitHub - Orange+Yellow Mixture */
         .skill-pill.git:hover {
-            border-color: #F05032;
-            background: rgba(240, 80, 50, 0.05);
-            /* Gradient Text Effect */
+            border-color: #F05032; background: rgba(240, 80, 50, 0.05);
             background-image: linear-gradient(45deg, #F05032, #F0DB4F);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
 
-        /* 9. Express - Grey */
-        .skill-pill.express:hover {
-            border-color: #999999;
-            color: #e0e0e0;
-            /* Light grey/white for readability */
-            background: rgba(153, 153, 153, 0.15);
-            box-shadow: 0 0 10px rgba(153, 153, 153, 0.2);
-        }
+        .skill-pill.express:hover { border-color: #999999; color: #e0e0e0; background: rgba(153, 153, 153, 0.15); box-shadow: 0 0 10px rgba(153, 153, 153, 0.2); }
+        .skill-pill.express:hover::before { background: #999999; }
 
-        /* Animation for Figma Gradient */
         @keyframes gradientMove {
-            0% {
-                background-position: 0% 50%;
-            }
-
-            50% {
-                background-position: 100% 50%;
-            }
-
-            100% {
-                background-position: 0% 50%;
-            }
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         /* --- CERTIFICATIONS --- */
         .cert-container {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            /* Increased width slightly */
             gap: 2rem;
         }
 
@@ -552,13 +647,11 @@
             background: var(--card-bg);
             transition: all 0.3s ease;
             position: relative;
-            overflow: hidden;
-            /* Keeps image inside the border radius */
             display: flex;
             flex-direction: column;
         }
 
-        /* The sliding purple line effect */
+        /* The sliding line effect */
         .cert-item::after {
             content: "";
             position: absolute;
@@ -566,7 +659,7 @@
             left: 0;
             width: 100%;
             height: 2px;
-            background: var(--accent-purple);
+            background: var(--accent-green); /* Switched to green for uniformity */
             transform: scaleX(0);
             transform-origin: left;
             transition: transform 0.3s ease;
@@ -575,46 +668,36 @@
 
         .cert-item:hover {
             transform: translateY(-3px);
-            border-color: var(--accent-purple);
-            box-shadow: 0 10px 30px -15px rgba(189, 0, 255, 0.2);
+            border-color: var(--accent-green);
+            box-shadow: 0 10px 30px -15px rgba(0, 255, 65, 0.2);
         }
 
         .cert-item:hover::after {
             transform: scaleX(1);
         }
 
-        /* Image Container */
         .cert-img-box {
             width: 100%;
             height: 300px;
-            /* Fixed height for uniformity */
             overflow: hidden;
             border-bottom: 1px solid var(--border-color);
-            background-color: #000;
+            background-color: #050505;
         }
 
         .cert-img-box img {
             width: 100%;
             height: 100%;
             object-fit: contain;
-            /* Ensures image covers area without stretching */
             object-position: center;
-            opacity: 1;
-            /* Dimmed slightly to fit dark theme */
             transition: all 0.5s ease;
-            filter: grayscale(30%);
-            /* Retro tech feel */
+            filter: grayscale(80%) contrast(1.2); /* Enhanced retro feel */
         }
 
-        /* Hover effects for image */
         .cert-item:hover .cert-img-box img {
             transform: scale(1.05);
-            /* Subtle zoom */
-            opacity: 1;
-            filter: grayscale(0%);
+            filter: grayscale(0%) contrast(1);
         }
 
-        /* Text Content Wrapper */
         .cert-content {
             padding: 1.5rem;
             flex-grow: 1;
@@ -632,9 +715,13 @@
         }
 
         .cert-issuer {
-            color: var(--accent-purple);
+            color: var(--accent-blue);
             font-size: 0.9rem;
             font-family: var(--font-mono);
+        }
+        .cert-issuer::before {
+            content: 'Issued by: ';
+            color: var(--text-dim);
         }
 
         /* --- FOOTER --- */
@@ -642,11 +729,13 @@
             text-align: center;
             padding: 5rem 0 2rem;
             margin-top: 5rem;
+            border-top: 1px dashed var(--border-color);
         }
 
         .footer-cta h2 {
             font-size: 2.5rem;
             margin-bottom: 1.5rem;
+            text-shadow: var(--accent-glow);
         }
 
         .footer-cta p {
@@ -659,6 +748,11 @@
             font-size: 0.8rem;
             color: var(--text-dim);
             margin-top: 3rem;
+            font-family: var(--font-mono);
+        }
+        
+        .credits span {
+            color: var(--accent-green);
         }
 
         /* --- ICONS SVG --- */
@@ -674,30 +768,12 @@
 
         /* --- MOBILE --- */
         @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-
-            .hero h2 {
-                font-size: 1.5rem;
-            }
-
-            .container {
-                padding: 1.5rem;
-                padding-top: 5rem;
-            }
-
-            .section-header h2 {
-                font-size: 1.5rem;
-            }
-
-            nav {
-                padding: 1rem;
-            }
+            .nav-links { display: none; }
+            .hero h1 { font-size: 2.2rem; }
+            .hero h2 { font-size: 1.2rem; }
+            .container { padding: 1.5rem; padding-top: 5rem; }
+            .section-header h2 { font-size: 1.5rem; }
+            nav { padding: 1rem; }
         }
     </style>
 </head>
@@ -710,7 +786,7 @@
     <header>
         <nav>
             <div class="logo">
-                <span>&lt;K/G&gt;</span> Kashyap's Portfolio
+                <span>[</span>K/G<span>]</span>
             </div>
             <div class="clock" id="clock">00:00:00</div>
             <ul class="nav-links">
@@ -726,30 +802,28 @@
     <main class="container">
 
         <section id="about" class="hero visible">
-            <div class="hero-intro">Hello, my name is</div>
+            <div class="hero-intro"><span class="user">guest@kashyap</span>:<span class="machine">~</span>$ whoami</div>
 
-            <h1>Kashyap Ghodasara</h1>
+            <!-- Glitch Text Effect Applied -->
+            <h1 class="glitch" data-text="Kashyap Ghodasara">Kashyap Ghodasara</h1>
 
-            <h2>Cyber Security Learner</h2>
+            <!-- Typing cursor added -->
+            <h2>> Learning Cyber Security<span class="blink">_</span></h2>
 
-            <p>Currently Learning Networking and Linux. Self Learner Full Stack Development.</p>
+            <p>MERN Stack Developer bridging the gap between full-stack architecture and system security. Currently expanding my arsenal with Ethical Hacking and Linux.</p>
 
             <div class="btn-group">
-                <a href="#projects" class="btn">Check out my work</a>
-                <a href="mailto:kashyappatel816@gmail.com" class="btn"
-                    style="border-color: var(--text-dim); color: var(--text-main);">Contact Me</a>
+                <a href="#projects" class="btn">Execute ./work.sh</a>
+                <a href="mailto:kashyappatel816@gmail.com" class="btn btn-secondary">init_contact()</a>
             </div>
 
             <div class="social-icons">
                 <a href="https://github.com/Kashyapghodasara" target="_blank" aria-label="GitHub">
                     <svg class="icon" viewBox="0 0 24 24">
-                        <path
-                            d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
-                        </path>
+                        <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
                     </svg>
                 </a>
-                <a href="https://www.linkedin.com/in/kashyap-ghodasara-323b11314/" target="_blank"
-                    aria-label="LinkedIn">
+                <a href="https://www.linkedin.com/in/kashyap-ghodasara-323b11314/" target="_blank" aria-label="LinkedIn">
                     <svg class="icon" viewBox="0 0 24 24">
                         <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
                         <rect x="2" y="9" width="4" height="12"></rect>
@@ -770,152 +844,99 @@
                 <!-- Project 1 -->
                 <div class="project-card">
                     <div>
-                        <div class="flex justify-between items-start">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                             <svg class="icon folder-icon" viewBox="0 0 24 24">
-                                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z">
-                                </path>
+                                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
                             </svg>
                             <div class="project-links">
-                                <a href="https://github.com/Kashyapghodasara/Box-Cricket-App" target="_blank"><svg class="icon"
-                                        viewBox="0 0 24 24">
-                                        <path
-                                            d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
-                                        </path>
-                                    </svg></a>
-                                <a href="https://box-cricket-app.vercel.app/" target="_blank"><svg class="icon"
-                                        viewBox="0 0 24 24">
+                                <a href="https://github.com/Kashyapghodasara/Box-Cricket-App" target="_blank">
+                                    <svg class="icon" viewBox="0 0 24 24">
+                                        <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+                                    </svg>
+                                </a>
+                                <a href="https://box-cricket-app.vercel.app/" target="_blank">
+                                    <svg class="icon" viewBox="0 0 24 24">
                                         <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
                                         <polyline points="15 3 21 3 21 9"></polyline>
                                         <line x1="10" y1="14" x2="21" y2="3"></line>
-                                    </svg></a>
+                                    </svg>
+                                </a>
                             </div>
                         </div>
-                        <h3 class="project-title">Box Cricket Booking Website</h3>
-                        <p class="project-desc">Simplify the process of booking box cricket grounds. 
-                            The platform includes features for both Users and Admins, 
-                            ensuring smooth management of time slots, bookings, and payments.</p>
+                        <h3 class="project-title">Box Cricket Booking</h3>
+                        <p class="project-desc">Simplify the process of booking box cricket grounds. The platform includes features for both Users and Admins, ensuring smooth management of time slots, bookings, and payments.</p>
                     </div>
                     <div class="tech-stack">
-                        <span>MongoDB</span>
-                        <span>Express</span>
-                        <span>React</span>
-                        <span>Tailwind</span>
-                        <span>Zustand</span>
-                        <span>Jest</span>
-                        <span>Postman</span>
-                        <span>Vercel</span>
+                        <span>MongoDB</span><span>Express</span><span>React</span><span>Tailwind</span><span>Zustand</span><span>Jest</span>
                     </div>
                 </div>
 
                 <!-- Project 2 -->
                 <div class="project-card">
                     <div>
-                        <div class="flex justify-between items-start">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                             <svg class="icon folder-icon" viewBox="0 0 24 24">
-                                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z">
-                                </path>
+                                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
                             </svg>
                             <div class="project-links">
-                                <a href="https://github.com/Kashyapghodasara/X-Clone" target="_blank"><svg
-                                        class="icon" viewBox="0 0 24 24">
-                                        <path
-                                            d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
-                                        </path>
-                                    </svg></a>
-                                <!-- <a href="" target="_blank"><svg class="icon"
-                                        viewBox="0 0 24 24">
-                                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                                        <polyline points="15 3 21 3 21 9"></polyline>
-                                        <line x1="10" y1="14" x2="21" y2="3"></line>
-                                    </svg></a> -->
+                                <a href="https://github.com/Kashyapghodasara/X-Clone" target="_blank">
+                                    <svg class="icon" viewBox="0 0 24 24">
+                                        <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+                                    </svg>
+                                </a>
                             </div>
                         </div>
-                        <h3 class="project-title">Twitter Clone</h3>
-                        <p class="project-desc">Designed to replicate and 
-                            enhance the core features of modern social networking platforms.</p>
+                        <h3 class="project-title">Twitter / X Clone</h3>
+                        <p class="project-desc">Designed to replicate and enhance the core features of modern social networking platforms.</p>
                     </div>
                     <div class="tech-stack">
-                        <span>MongoDB</span>
-                        <span>Express</span>
-                        <span>React</span>
-                        <span>Tailwind</span>
-                        <span>Redux</span>
-                        <span>Multer</span>
+                        <span>MongoDB</span><span>Express</span><span>React</span><span>Redux</span><span>Multer</span>
                     </div>
                 </div>
 
                 <!-- Project 3 -->
                 <div class="project-card">
                     <div>
-                        <div class="flex justify-between items-start">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                             <svg class="icon folder-icon" viewBox="0 0 24 24">
-                                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z">
-                                </path>
+                                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
                             </svg>
                             <div class="project-links">
-                                <a href="https://github.com/Kashyapghodasara/Registration-Nodemailer" target="_blank"><svg
-                                        class="icon" viewBox="0 0 24 24">
-                                        <path
-                                            d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
-                                        </path>
-                                    </svg></a>
-                                <!-- <a href="/" target="_blank"><svg class="icon"
-                                        viewBox="0 0 24 24">
-                                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                                        <polyline points="15 3 21 3 21 9"></polyline>
-                                        <line x1="10" y1="14" x2="21" y2="3"></line>
-                                    </svg></a> -->
+                                <a href="https://github.com/Kashyapghodasara/Registration-Nodemailer" target="_blank">
+                                    <svg class="icon" viewBox="0 0 24 24">
+                                        <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+                                    </svg>
+                                </a>
                             </div>
                         </div>
-                        <h3 class="project-title">Email Registration - Nodemailer</h3>
-                        <p class="project-desc">The Node.js application using Nodemailer to send automated emails. 
-                            Features include user registration email confirmations. 
-                            Customizable templates for a personalized user experience.</p>
+                        <h3 class="project-title">Secure Auth & Mailing</h3>
+                        <p class="project-desc">The Node.js application using Nodemailer to send automated emails. Features include user registration email confirmations. Customizable templates for a personalized user experience.</p>
                     </div>
                     <div class="tech-stack">
-                        <span>MongoDB</span>
-                        <span>Express</span>
-                        <span>React</span>
-                        <span>Tailwind</span>
-                        <span>Nodemailer</span>
+                        <span>Node.js</span><span>Express</span><span>React</span><span>Nodemailer</span>
                     </div>
                 </div>
 
                 <!-- Project 4 -->
                 <div class="project-card">
                     <div>
-                        <div class="flex justify-between items-start">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                             <svg class="icon folder-icon" viewBox="0 0 24 24">
-                                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z">
-                                </path>
+                                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
                             </svg>
                             <div class="project-links">
-                                <a href="https://github.com/Kashyapghodasara/Lost-Found-Hub" target="_blank"><svg class="icon"
-                                        viewBox="0 0 24 24">
-                                        <path
-                                            d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
-                                        </path>
-                                    </svg></a>
-                                <!-- <a href="" target="_blank"><svg class="icon"
-                                        viewBox="0 0 24 24">
-                                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                                        <polyline points="15 3 21 3 21 9"></polyline>
-                                        <line x1="10" y1="14" x2="21" y2="3"></line>
-                                    </svg></a> -->
+                                <a href="https://github.com/Kashyapghodasara/Lost-Found-Hub" target="_blank">
+                                    <svg class="icon" viewBox="0 0 24 24">
+                                        <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+                                    </svg>
+                                </a>
                             </div>
                         </div>
-                        <h3 class="project-title">Lost and Found Hub</h3>
-                        <p class="project-desc">Lost and Found Hub for campus. 
-                            It is an centralized system for lost and found items. 
-                            We also provide email service and inform user when his/her product is found. 
-                            We also add the verification layer when user comes and collect their product</p>
+                        <h3 class="project-title">Campus Lost & Found</h3>
+                        <p class="project-desc">Centralized hub for tracking lost items. Integrates automated email alerts and an added verification layer to secure the retrieval process.</p>
                     </div>
                     <div class="tech-stack">
-                        <span>MongoDB</span>
-                        <span>Express</span>
-                        <span>React</span>
-                        <span>Tailwind</span>
-                        <span>Nodemailer</span>
+                        <span>MongoDB</span><span>Express</span><span>React</span><span>Tailwind</span><span>Auth</span>
                     </div>
                 </div>
             </div>
@@ -944,12 +965,12 @@
         <!-- JOURNEY/EDUCATION SECTION -->
         <section id="education">
             <div class="section-header">
-                <h2><span>03.</span> Education </h2>
+                <h2><span>03.</span> System Logs (Education)</h2>
                 <div class="line"></div>
             </div>
 
-            <div class="timeline-item">
-                <!-- Role 1 -->
+            <div class="timeline">
+                <div class="timeline-item">
                     <div class="timeline-header">
                         <div>
                             <div class="role">Computer Science and Engineering</div>
@@ -957,17 +978,10 @@
                         </div>
                         <div class="date">2026 - Present</div>
                     </div>
-                    <div class="timeline-desc">
-                        <!-- <ul>
-                            <li>Understand Core Engineering Subject and Focusing on 
-                                MERN Stack Development as extra study </li>
-                            <li>CGPA : 9.67</li>
-                        </ul> -->
-                    </div>
-            </div>
+                    <div class="timeline-desc"></div>
+                </div>
 
-            <div class="timeline-item">
-                <!-- Role 2 -->
+                <div class="timeline-item">
                     <div class="timeline-header">
                         <div>
                             <div class="role">Diploma in Computer Engineering</div>
@@ -977,25 +991,23 @@
                     </div>
                     <div class="timeline-desc">
                         <ul>
-                            <li>Understand Core Engineering Subject and Focusing on 
-                                MERN Stack Development as extra study </li>
-                            <li>CGPA : 9.67</li>
+                            <li>Mastered core Engineering subjects while simultaneously pursuing independent Full-Stack development.</li>
+                            <li>Graduated with Honors - CGPA: 9.67</li>
                         </ul>
                     </div>
-            </div>
+                </div>
 
-                <!-- Role 3 (Education) -->
                 <div class="timeline-item">
                     <div class="timeline-header">
                         <div>
-                            <div class="role">SSC</div>
+                            <div class="role">Secondary Education (SSC)</div>
                             <div class="company">Sister Nivedita School - Rajkot</div>
                         </div>
                         <div class="date">2022 - 2023</div>
                     </div>
                     <div class="timeline-desc">
                         <ul>
-                            <li>Percentage : 88.5%</li>
+                            <li>Percentage achieved: 88.5%</li>
                         </ul>
                     </div>
                 </div>
@@ -1005,7 +1017,7 @@
 
         <section id="certifications">
             <div class="section-header">
-                <h2><span>04.</span> Certifications</h2>
+                <h2><span>04.</span> Security Clearances</h2>
                 <div class="line"></div>
             </div>
 
@@ -1013,7 +1025,7 @@
 
                 <div class="cert-item">
                     <div class="cert-img-box">
-                        <img src="/Images/Forage TATA.PNG" alt="Cybersecurity Certificate" loading="lazy">
+                        <img src="./Images/Forage TATA.PNG" alt="Cybersecurity Certificate" loading="lazy">
                     </div>
                     <div class="cert-content">
                         <div class="cert-title">Cybersecurity Analyst Job Simulation (IAM)</div>
@@ -1048,18 +1060,17 @@
         <footer id="contact">
             <div class="footer-cta">
                 <div class="section-header" style="justify-content: center; margin-bottom: 1rem;">
-                    <h2><span>05.</span> What's Next?</h2>
+                    <h2><span>05.</span> Initialize Connection</h2>
                 </div>
                 <p>
-                    I'm always excited to collaborate on innovative projects and always ready to grab an Opportunity !
-                    For More Say Hi
+                    My inbox is always open. Whether you have a question, a project collaboration, or just want to discuss web architecture and security vulnerabilities.
                 </p>
-                <a href="mailto:kashyappatel816@gmail.com" class="btn">Get In Touch</a>
+                <a href="mailto:kashyappatel816@gmail.com" class="btn">Establish Handshake</a>
                 <br><br>
             </div>
 
             <div class="credits">
-                By Kashyap Ghodasara
+                Built by <span>Kashyap Ghodasara</span> // System Online
             </div>
         </footer>
 
@@ -1075,7 +1086,7 @@
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('visible');
-                    observer.unobserve(entry.target); // Only animate once
+                    observer.unobserve(entry.target);
                 }
             });
         }, observerOptions);
@@ -1093,11 +1104,10 @@
         setInterval(updateClock, 1000);
         updateClock();
 
-        // --- 3. KEYBOARD NAV (For Accessibility/Hacker Feel) ---
+        // --- 3. KEYBOARD NAV (For Hacker Feel) ---
         document.addEventListener('keydown', (e) => {
             if (e.key === '/') {
-                // Future implementation: Open command palette
-                // console.log("Cmd palette trigger");
+                console.log("Root access requested...");
             }
         });
     </script>
